@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = var.gcp_credentials
+  credentials = var.GOOGLE_CREDENTIALS
   project    = "acme"
   region     = "us-central1"
 }
@@ -81,17 +81,3 @@ resource "google_sql_database_instance" "example_db_instance" {
   deletion_protection = false
 }
 
-output "instance_name" {
-  description = "Name of the GCP Compute Engine instance"
-  value       = google_compute_instance.example_vm.name
-}
-
-output "instance_external_ip" {
-  description = "External IP address of the GCP Compute Engine instance"
-  value       = google_compute_instance.example_vm.network_interface[0].access_config[0].nat_ip
-}
-
-output "db_instance_name" {
-  description = "Name of the GCP SQL Database instance"
-  value       = google_sql_database_instance.example_db_instance.name
-}

@@ -4,6 +4,11 @@ variable "asg_name" {
   type        = string
 }
 
+variable "ami_id" {
+  description = "The id of the ami"
+  type        = string
+}
+
 variable "launch_template_id" {
   description = "The ID of the launch template for the Auto Scaling Group"
   type        = string
@@ -44,3 +49,12 @@ variable "security_groups" {
   type        = list(string)
 }
 
+variable "aws_access_key" {
+  description = "The aws_access_key"
+  type        = string
+}
+
+variable "aws_secret_key" {
+  description = "The id aws_secret_key"
+  type        = string
+}
