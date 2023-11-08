@@ -1,11 +1,12 @@
 output "instance_names" {
   description = "Names of the VM instances in GCP"
-  value       = google_compute_instance.example_vm[*].name
+  value       = google_compute_instance.example_vm.name
+  
 }
 
 output "instance_external_ips" {
   description = "External IP addresses of the VM instances in GCP"
-  value       = google_compute_instance.example_vm[*].network_interface[0].access_config[0].nat_ip
+  value       = google_compute_instance.example_vm.network_interface[0].access_config[0].nat_ip
 }
 
 output "postgresql_instance_ip" {
@@ -15,5 +16,5 @@ output "postgresql_instance_ip" {
 
 output "gcp_project_id" {
   description = "GCP Project ID"
-  value       = google_project.default.project_id
+  value       = google_compute_instance.example_vm.project
 }
