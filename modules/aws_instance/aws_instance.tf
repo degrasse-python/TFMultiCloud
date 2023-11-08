@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1" # Modify to your desired region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  access_key = var. AWS_ACCESS_KEY_ID 
+  secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
 # Define a VPC and subnets
@@ -29,26 +29,49 @@ resource "aws_security_group" "example_sg" {
 
   # Define your security group rules here
   # Example rule for SSH access:
-  # ingress {
-  #   from_port   = 22
-  #   to_port     = 22
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
-}
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+  }
 
 resource "aws_instance" "api_example" {
-  ami      = "ami-0123456789abcdef0" # Specify your desired AMI
+  ami      = "ami-0123456789abcdef0" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
   subnet_id = aws_subnet.example_subnet_1.id
   key_name      = "your-key-name"        # Replace with your key name
+  
+  /*
+  provisioner "remote-exec" {
+    inline = ["echo 'Hello World'"]
+
+    connection {
+      type = "ssh"
+      user = "${var.ssh_user}"
+      private_key = "${file(${var.private_key_path})}"
+
+    }
+  }
+
+  */
 
   provisioner "local-exec" {
     command = "aws ec2 wait instance-status-ok --region us-east-1 --instance-ids ${self.id}"
   }
 
+  /*
+  provisioner "local-exec2" {
+    command = "ansible-playbook -u root -i ${aws_launch_configuration.web_lc.ip_address} 
+                --private_key './path2key/key' 
+                -e pub-key=${var.ssh_key} 
+                ansible-configuration.yaml"
+              
+  }
+  */
 }
 
 resource "aws_launch_configuration" "web_lc" {
@@ -56,7 +79,7 @@ resource "aws_launch_configuration" "web_lc" {
   image_id      = "ami-0123456789abcdef0" # Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   security_groups = [aws_security_group.web_sg.id]
-  key_name      = "your-key-name"        # Replace with your key name
+  # key_name      = "your-key-name"        # Replace with your key name
   /*
 
     Why not have ansible do this for you?

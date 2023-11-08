@@ -9,12 +9,12 @@ variable "ami_id" {
   type        = string
 }
 
-variable "aws_access_key" {
+variable "AWS_ACCESS_KEY_ID" {
   description = "The aws_access_key"
   type        = string
 }
 
-variable "aws_secret_key" {
+variable "AWS_SECRET_ACCESS_KEY" {
   description = "The id aws_secret_key"
   type        = string
 }

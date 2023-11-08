@@ -61,20 +61,20 @@ variable "security_groups" {
   type        = list(string)
 }
 
-variable "aws_access_key" {
+variable "AWS_ACCESS_KEY_ID" {
   description = "The aws_access_key"
   type        = string
   validation {
-    condition = length(var.aws_access_key) > 10
+    condition = length(var.AWS_ACCESS_KEY_ID) > 10
     error_message = "The file must be more than 10 chars"
   }
 }
 
-variable "aws_secret_key" {
+variable "AWS_SECRET_ACCESS_KEY" {
   description = "The id aws_secret_key"
   type        = string
   validation {
-    condition = length(var.aws_secret_key) > 10
+    condition = length(var.AWS_SECRET_ACCESS_KEY) > 10
     error_message = "The file must be more than 10 chars"
   }
 }

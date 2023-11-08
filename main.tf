@@ -19,10 +19,10 @@ module "aws" {
   min_size = 2
   desired_capacity = 2
   security_groups = [aws_security_group.web_sg.id]
-  ami_id = "ami-0123456789abcdef0"
+  ami_id = "ami-06a869d0fb5f8ad84" //  ami-06a869d0fb5f8ad84
   instance_type = "t2.micro"
-  aws_access_key = var.aws_access_key
-  aws_secret_key = var.aws_secret_key
+  AWS_ACCESS_KEY_ID  = var.AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY  = var.AWS_SECRET_ACCESS_KEY 
 }
 
 module "google" {
