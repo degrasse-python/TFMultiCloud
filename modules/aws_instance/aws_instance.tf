@@ -202,8 +202,7 @@ resource "aws_lb" "web_nlb" {
   load_balancer_type = "network"
 
   subnet_mapping {
-    subnet_id     = aws_subnet.public_subnet_1.id  # Replace with your subnet IDs
-    allocation_id = aws_eip.nlb_eip.id             # Optionally allocate an Elastic IP
+    subnet_id     = aws_subnet.example_subnet_1.id # Replace with your subnet IDs
   }
 
   enable_deletion_protection = false  # Modify as needed
@@ -213,7 +212,7 @@ resource "aws_lb_target_group" "web_target_group" {
   name     = "web-target-group"
   port     = 80  # Port your instances are listening on
   protocol = "TCP"
-  vpc_id   = aws_vpc.main.id  # Replace with your VPC ID
+  vpc_id   = aws_vpc.example_vpc.id  # Replace with your VPC ID
 }
 
 resource "aws_lb_listener" "web_listener" {
