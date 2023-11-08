@@ -1,5 +1,5 @@
 # Variables for Auto Scaling Group
-variable "asg_name" {
+/* variable "asg_name" {
   description = "The name of the Auto Scaling Group"
   type        = string
   default = "web-service-1"
@@ -70,7 +70,7 @@ variable "security_groups" {
   type        = list(string)
   default = [ "value" ]
 }
-
+*/
 variable "AWS_ACCESS_KEY_ID" {
   description = "The aws_access_key"
   type        = string

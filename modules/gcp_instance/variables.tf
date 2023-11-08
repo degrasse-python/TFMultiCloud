@@ -1,3 +1,4 @@
+/*
 variable "project_id" {
   description = "The ID of the GCP project."
   type        = string
@@ -38,6 +39,8 @@ variable "gcp_credentials_file" {
   description = "Path to the GCP credentials file in HCL format."
   type        = string
 }
+*/
+
 
 variable "GOOGLE_CREDENTIALS" {
   description = "Path to the GCP credentials file in HCL format."
@@ -48,3 +51,5 @@ variable "GOOGLE_CREDENTIALS" {
     error_message = "The file must be more than 10 chars"
   }
 }
+
+
