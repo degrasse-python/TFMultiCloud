@@ -21,6 +21,7 @@ provider "aws" {
 
 provider "google" {
   credentials = var.GOOGLE_CREDENTIALS
-  project    = "ACME"
+  project    = "Energy Stars"
   region     = "us-central1"
+  zone    = "us-central1-c"
 }

@@ -1,7 +1,12 @@
 provider "google" {
   credentials = var.GOOGLE_CREDENTIALS
-  project    = "acme"
+  project    = "Energy Stars"
   region     = "us-central1"
+}
+
+resource "google_compute_network" "vpc_network" {
+  name                    = "terraform-network"
+  auto_create_subnetworks = "true"
 }
 
 resource "google_compute_instance" "example_vm" {
@@ -12,12 +17,14 @@ resource "google_compute_instance" "example_vm" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "debian-cloud/debian-11"
     }
   }
 
   network_interface {
-    network = "default"
+    network = google_compute_network.vpc_network.self_link
+    access_config {
+    }
   }
 
   metadata_startup_script = <<-EOF

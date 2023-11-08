@@ -1,11 +1,20 @@
 variable "project_id" {
   description = "The ID of the GCP project."
   type        = string
+  default = "ACME"
+  validation {
+    condition = length(var.region) > 10
+    error_message = "The file must be more than 10 chars"
+  }
 }
 
 variable "region" {
   description = "The GCP region where resources will be created."
   type        = string
+  validation {
+    condition = length(var.region) > 5
+    error_message = "The file must be more than 5 chars"
+  }
 }
 
 variable "machine_type" {
@@ -17,6 +26,10 @@ variable "machine_type" {
 variable "zone" {
   description = "The GCP zone where resources will be created."
   type        = string
+  validation {
+    condition = length(var.zone) > 5
+    error_message = "The file must be more than 5 chars"
+  }
 }
 
 variable "gcp_credentials_file" {
@@ -27,4 +40,8 @@ variable "gcp_credentials_file" {
 variable "GOOGLE_CREDENTIALS" {
   description = "Path to the GCP credentials file in HCL format."
   type        = string
+  validation {
+    condition = length(var.GOOGLE_CREDENTIALS) > 10
+    error_message = "The file must be more than 10 chars"
+  }
 }

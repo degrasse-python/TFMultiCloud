@@ -37,6 +37,19 @@ resource "aws_security_group" "example_sg" {
   # }
 }
 
+resource "aws_instance" "api_example" {
+  ami      = "ami-0123456789abcdef0" # Specify your desired AMI
+  instance_type = "t2.micro"             # Choose an appropriate instance type
+  associate_public_ip_address = true
+  security_groups = [aws_security_group.web_sg.id]
+  subnet_id = aws_subnet.example_subnet_1.id
+  key_name      = "your-key-name"        # Replace with your key name
+
+  provisioner "local-exec" {
+    command = "aws ec2 wait instance-status-ok --region us-east-1 --instance-ids ${self.id}"
+  }
+
+}
 
 resource "aws_launch_configuration" "web_lc" {
   name_prefix   = "web-lc-"
@@ -44,7 +57,11 @@ resource "aws_launch_configuration" "web_lc" {
   instance_type = "t2.micro"             # Choose an appropriate instance type
   security_groups = [aws_security_group.web_sg.id]
   key_name      = "your-key-name"        # Replace with your key name
+  /*
 
+    Why not have ansible do this for you?
+
+  */
   user_data = <<-EOF
               #!/bin/bash
               # User data script for installing a FastAPI web API on Amazon Linux 2
@@ -94,6 +111,30 @@ resource "aws_launch_configuration" "web_lc" {
               sudo systemctl enable uvicorn
               sudo systemctl start uvicorn
               EOF
+
+  provisioner "local-exec" {
+    command = "aws ec2 wait instance-status-ok --region us-east-1 --instance-ids ${self.id}"
+  }
+
+  /*
+  provisioner "remote-exec" {
+    inline = ["echo 'Hello World'"]
+
+    connection {
+      type = "ssh"
+      user = "${var.ssh_user}"
+      private_key = "${file(${var.private_key_path})}"
+
+    }
+  }
+  provisioner "local-exec2" {
+    command = "ansible-playbook -u root -i ${aws_launch_configuration.web_lc.ip_address} 
+                --private_key './path2key/key' 
+                -e pub-key=${var.ssh_key} 
+                ansible-configuration.yaml"
+              
+  }
+  */
 }
 
 resource "aws_autoscaling_group" "web_asg" {
