@@ -3,7 +3,7 @@ variable "project_id" {
   type        = string
   default = "ACME"
   validation {
-    condition = length(var.region) > 10
+    condition = length(var.project_id) > 10
     error_message = "The file must be more than 10 chars"
   }
 }
