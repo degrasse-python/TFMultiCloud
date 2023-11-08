@@ -1,6 +1,6 @@
 provider "google" {
   credentials = var.GOOGLE_CREDENTIALS
-  project    = "Energy Stars"
+  project    = "energy-stars"
   region     = "us-central1"
 }
 
@@ -77,7 +77,7 @@ resource "google_compute_instance" "example_vm" {
 }
 
 resource "google_sql_database_instance" "example_db_instance" {
-  database_version = "POSTGRES_12"
+  database_version = "MYSQL_8_0"
   region           = "us-central1"
   name             = "example-db-instance"
 

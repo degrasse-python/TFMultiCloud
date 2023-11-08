@@ -133,7 +133,7 @@ resource "aws_instance" "api_example" {
 
 resource "aws_launch_configuration" "web_lc" {
   name_prefix   = "web-lc-"
-  image_id      = "ami-0840becec4971bb87 " # Specify your desired AMI
+  image_id      = "ami-0840becec4971bb87" # Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   security_groups = [aws_security_group.web_sg.id]
   # key_name      = "your-key-name"        # Replace with your key name
