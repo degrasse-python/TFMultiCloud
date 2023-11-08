@@ -45,7 +45,7 @@ resource "aws_security_group" "example_sg" {
   }
 
 resource "aws_instance" "api_example" {
-  ami      = "ami-06a869d0fb5f8ad84" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
+  ami      = "ami-0840becec4971bb87" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
@@ -133,7 +133,7 @@ resource "aws_instance" "api_example" {
 
 resource "aws_launch_configuration" "web_lc" {
   name_prefix   = "web-lc-"
-  image_id      = "ami-06a869d0fb5f8ad84" # Specify your desired AMI
+  image_id      = "ami-0840becec4971bb87 " # Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   security_groups = [aws_security_group.web_sg.id]
   # key_name      = "your-key-name"        # Replace with your key name
