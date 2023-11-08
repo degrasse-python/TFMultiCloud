@@ -29,11 +29,6 @@ resource "aws_internet_gateway" "example_igw" {
   vpc_id = aws_vpc.example_vpc.id
 }
 
-# Attach the internet gateway to the VPC
-resource "aws_vpc_attachment" "example_igw_attachment" {
-  vpc_id             = aws_vpc.example_vpc.id
-  internet_gateway_id = aws_internet_gateway.example_igw.id
-}
 
 # Define a security group for your instances
 resource "aws_security_group" "example_sg" {
