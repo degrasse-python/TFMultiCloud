@@ -92,3 +92,9 @@ variable "AWS_SECRET_ACCESS_KEY" {
   description = "The id aws_secret_key"
   type        = string
 }
+
+
+variable "GOOGLE_CREDENTIALS" {
+  description = "The json creds for Google"
+  type        = string
+}
