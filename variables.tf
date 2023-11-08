@@ -1,3 +1,4 @@
+/*
 # Variables for Auto Scaling Group
 variable "asg_name" {
   description = "The name of the Auto Scaling Group"
@@ -9,15 +10,6 @@ variable "ami_id" {
   type        = string
 }
 
-variable "AWS_ACCESS_KEY_ID" {
-  description = "The aws_access_key"
-  type        = string
-}
-
-variable "AWS_SECRET_ACCESS_KEY" {
-  description = "The id aws_secret_key"
-  type        = string
-}
 
 variable "launch_template_id" {
   description = "The ID of the launch template for the Auto Scaling Group"
@@ -87,5 +79,16 @@ variable "gcp_credentials_file" {
 
 variable "GOOGLE_CREDENTIALS" {
   description = "Path to the GCP credentials file in HCL format."
+  type        = string
+}
+*/
+
+variable "AWS_ACCESS_KEY_ID" {
+  description = "The aws_access_key"
+  type        = string
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  description = "The id aws_secret_key"
   type        = string
 }
