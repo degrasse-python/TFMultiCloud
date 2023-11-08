@@ -18,4 +18,5 @@ module "aws" {
 module "google" {
   source = "./modules/gcp_instance"
   GOOGLE_CREDENTIALS = var.GOOGLE_CREDENTIALS
+  credentials = var.GOOGLE_CREDENTIALS
 }
