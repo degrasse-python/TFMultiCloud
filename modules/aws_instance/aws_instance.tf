@@ -23,6 +23,18 @@ resource "aws_subnet" "example_subnet_2" {
   map_public_ip_on_launch = true
 }
 
+
+# Create an internet gateway
+resource "aws_internet_gateway" "example_igw" {
+  vpc_id = aws_vpc.example_vpc.id
+}
+
+# Attach the internet gateway to the VPC
+resource "aws_vpc_attachment" "example_igw_attachment" {
+  vpc_id             = aws_vpc.example_vpc.id
+  internet_gateway_id = aws_internet_gateway.example_igw.id
+}
+
 # Define a security group for your instances
 resource "aws_security_group" "example_sg" {
   name_prefix = "example-sg-"
@@ -38,7 +50,7 @@ resource "aws_security_group" "example_sg" {
   }
 
 resource "aws_instance" "api_example" {
-  ami      = "ami-0123456789abcdef0" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
+  ami      = "ami-06a869d0fb5f8ad84" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
@@ -58,6 +70,56 @@ resource "aws_instance" "api_example" {
   }
 
   */
+  user_data = <<-EOF
+              #!/bin/bash
+              # User data script for installing a FastAPI web API on Amazon Linux 2
+
+              # Update the system
+              sudo yum update -y
+
+              # Install Python 3 and pip
+              sudo yum install python3 python3-pip -y
+
+              # Install FastAPI and Uvicorn
+              pip3 install fastapi uvicorn
+
+              # Create a directory for your FastAPI app
+              mkdir /app
+              cd /app
+
+              # Create a simple FastAPI app in a Python script (e.g., main.py)
+              cat <<EOL > main.py
+              from fastapi import FastAPI
+
+              app = FastAPI()
+
+              @app.get("/")
+              def read_root():
+                  return {"message": "Hello, FastAPI!"}
+              EOL
+
+              # Start the FastAPI app using Uvicorn
+              uvicorn main:app --host 0.0.0.0 --port 80 --reload
+
+              # Enable the Uvicorn service to start at boot
+              cat <<EOF > /etc/systemd/system/uvicorn.service
+              [Unit]
+              Description=Uvicorn FastAPI
+
+              [Service]
+              ExecStart=/usr/local/bin/uvicorn main:app --host 0.0.0.0 --port 80 --reload
+              Restart=always
+              StartLimitInterval=0
+
+              [Install]
+              WantedBy=multi-user.target
+              EOL
+
+              # Enable and start the Uvicorn service
+              sudo systemctl enable uvicorn
+              sudo systemctl start uvicorn
+              EOF
+
 
   provisioner "local-exec" {
     command = "aws ec2 wait instance-status-ok --region us-east-1 --instance-ids ${self.id}"
@@ -76,7 +138,7 @@ resource "aws_instance" "api_example" {
 
 resource "aws_launch_configuration" "web_lc" {
   name_prefix   = "web-lc-"
-  image_id      = "ami-0123456789abcdef0" # Specify your desired AMI
+  image_id      = "ami-06a869d0fb5f8ad84" # Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   security_groups = [aws_security_group.web_sg.id]
   # key_name      = "your-key-name"        # Replace with your key name
