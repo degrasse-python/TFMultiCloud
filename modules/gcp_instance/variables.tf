@@ -46,10 +46,7 @@ variable "GOOGLE_CREDENTIALS" {
   description = "Path to the GCP credentials file in HCL format."
   type        = string
   default = "value"
-  validation {
-    condition = length(var.GOOGLE_CREDENTIALS) > 10
-    error_message = "The file must be more than 10 chars"
-  }
+
 }
 
 
