@@ -4,6 +4,10 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
 # Define a VPC and subnets
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -16,8 +20,6 @@ resource "aws_subnet" "example_subnet_1" {
   map_public_ip_on_launch = true
 }
 
-
-
 resource "aws_subnet" "example_subnet_2" {
   vpc_id                  = aws_vpc.example_vpc.id
   cidr_block              = "10.0.2.0/24"
@@ -25,15 +27,17 @@ resource "aws_subnet" "example_subnet_2" {
   map_public_ip_on_launch = true
 }
 
-
 # Create an internet gateway
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = aws_vpc.example_vpc.id
 }
 
+/*
+
+PULL REQUEST 1
 
 # Define a security group for your instances
-resource "aws_security_group" "example_sg" {
+resource "aws_security_group" "ec2_sg" {
   name_prefix = "example-sg-"
 
   # Define your security group rules here
@@ -44,26 +48,34 @@ resource "aws_security_group" "example_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
    }
-  }
+}
+
+resource "aws_key_pair" "example_key_pair" {
+  key_name   = "example-key-pair"
+  public_key = var.EC2_KEY_PAIR_PUBLIC_KEY
+}
+*/
 
 resource "aws_instance" "api_example" {
   ami      = "ami-0fc5d935ebf8bc3bc" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
-  # security_groups = [aws_security_group.web_sg.id]
   availability_zone  = "us-east-1a"
-  # subnet_id = aws_subnet.example_subnet_1.id
-  # key_name      = "your-key-name"        # Replace with your key name
+  
   
   /*
+  # PULL REQUEST 1
+  # security_groups = [aws_security_group.ec2_sg.id]
+  # key_name  = "ssh-key"        # Replace with your key name
+  
+  
   provisioner "remote-exec" {
     inline = ["echo 'Hello World'"]
 
     connection {
       type = "ssh"
       user = "${var.ssh_user}"
-      private_key = "${file(${var.private_key_path})}"
-
+      private_key = var.EC2_KEY_PAIR_PUBLIC_KEY
     }
   }
 
@@ -127,14 +139,42 @@ resource "aws_instance" "api_example" {
   /*
   provisioner "local-exec2" {
     command = "ansible-playbook -u root -i ${aws_launch_configuration.web_lc.ip_address} 
-                --private_key './path2key/key' 
+                --private_key ${var.EC2_KEY_PAIR_PUBLIC_KEY} 
                 -e pub-key=${var.ssh_key} 
                 ../ansible/api_example.yaml"
               
   }
   */
+
 }
 
+resource "aws_security_group" "db_sg" {
+  name_prefix = "db_sg"
+  vpc_id      = aws_vpc.example_vpc.id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    security_groups = [aws_security_group.ec2_sg.id]
+  }
+}
+
+resource "aws_db_instance" "example" {
+  allocated_storage    = 20
+  engine               = "postgres"
+  engine_version       = "12.4"
+  instance_class       = "db.t2.micro"
+  username             = "admin"
+  password             = "password"
+  parameter_group_name = "default.postgres12"
+  skip_final_snapshot  = true
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
+
+  tags = {
+    Name = "example"
+  }
+}
 
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
@@ -169,7 +209,7 @@ resource "aws_lb_target_group" "web_target_group" {
   name     = "web-target-group"
   port     = 80  # Port your instances are listening on
   protocol = "TCP"
-  vpc_id   = aws_vpc.example_vpc.id  # Replace with your VPC ID
+  vpc_id   = data.aws_vpc.default.id  # Replace with your VPC ID
 }
 
 resource "aws_lb_listener" "web_listener" {
@@ -182,3 +222,5 @@ resource "aws_lb_listener" "web_listener" {
     target_group_arn = aws_lb_target_group.web_target_group.arn
   }
 }
+
+

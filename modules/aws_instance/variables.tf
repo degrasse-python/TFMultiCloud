@@ -92,3 +92,15 @@ variable "AWS_SECRET_ACCESS_KEY" {
     error_message = "The file must be more than 10 chars"
   }
 }
+
+/*
+variable "EC2_KEY_PAIR_PUBLIC_KEY" {
+  description = "The key pair for the EC2 instances"
+  type        = string
+  default = "value"
+  validation {
+    condition = length(var.EC2_KEY_PAIR_PUBLIC_KEY) > 10
+    error_message = "The KEY PAIR must be more than 10 chars"
+  }
+}
+*/

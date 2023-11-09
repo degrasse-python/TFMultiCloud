@@ -1,0 +1,46 @@
+---
+- name: Configure GCP VM
+  hosts: <gcp-vm-name>
+  remote_user: <gcp-vm-username>
+  become: true
+
+  vars:
+    app_name: myapp
+    app_port: 8000
+    db_host: <db-instance-ip>
+    db_name: mydatabase
+    db_user: myuser
+    db_password: mypassword
+
+  tasks:
+    - name: Install Python 3 and pip
+      apt:
+        name: python3
+        state: present
+
+    - name: Install PostgreSQL client
+      apt:
+        name: postgresql-client
+        state: present
+
+    - name: Install pip packages
+      pip:
+        name:
+          - fastapi
+          - uvicorn[standard]
+          - psycopg2-binary
+
+    - name: Clone FastAPI application code
+      git:
+        repo: https://github.com/<username>/<repository>.git
+        dest: /home/<gcp-vm-username>/{{ app_name }}
+        version: master
+
+    - name: Install pip packages for the application
+      pip:
+        requirements: /home/<gcp-vm-username>/{{ app_name }}/requirements.txt
+
+    - name: Start the FastAPI application
+      command: uvicorn {{ app_name }}.main:app --host 0.0.0.0 --port {{ app_port }} --workers 4 --log-level warning
+      environment:
+        DATABASE_URL: postgresql://{{ db_user }}:{{ db_password }}@{{ db_host }}/{{ db_name }}

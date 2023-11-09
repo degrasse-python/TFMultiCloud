@@ -88,3 +88,16 @@ resource "google_sql_database_instance" "example_db_instance" {
   deletion_protection = false
 }
 
+/* PULL REQUEST 1
+resource "google_sql_firewall_rule" "example_db_firewall" {
+  name        = "example-db-firewall"
+  # instance    = google_sql_database_instance.example_db_instance.name
+  instance = google_sql_database_instance.example_db_instance.name
+  project     = var.project_id
+  allow {
+    protocol = "tcp"
+    ports    = ["3306"]
+  }
+  source_ranges = [google_compute_instance.example_vm.network_interface[0].network_ip]
+}
+*/
