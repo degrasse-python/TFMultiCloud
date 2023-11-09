@@ -52,7 +52,6 @@ resource "aws_instance" "api_example" {
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
   availability_zone  = "us-east-1a"
-  metadata_options { http_endpoint = "enabled" }
   # subnet_id = aws_subnet.example_subnet_1.id
   # key_name      = "your-key-name"        # Replace with your key name
   
