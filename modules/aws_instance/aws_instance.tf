@@ -16,6 +16,8 @@ resource "aws_subnet" "example_subnet_1" {
   map_public_ip_on_launch = true
 }
 
+
+
 resource "aws_subnet" "example_subnet_2" {
   vpc_id                  = aws_vpc.example_vpc.id
   cidr_block              = "10.0.2.0/24"
@@ -49,8 +51,8 @@ resource "aws_instance" "api_example" {
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
-  subnet_id = aws_subnet.example_subnet_1.id
-  key_name      = "your-key-name"        # Replace with your key name
+  # subnet_id = aws_subnet.example_subnet_1.id
+  # key_name      = "your-key-name"        # Replace with your key name
   
   /*
   provisioner "remote-exec" {
