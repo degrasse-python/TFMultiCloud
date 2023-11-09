@@ -1,22 +1,18 @@
-output "asg_name" {
+output "api_example_user_data" {
   description = "Name of the Auto Scaling Group"
-  value       = aws_autoscaling_group.web_asg.name
+  value       = aws_instance.api_example.user_data
 }
 
-output "asg_target_group_arns" {
+output "api_example_ip" {
   description = "Target Group ARNs of the Auto Scaling Group"
-  value       = aws_autoscaling_group.web_asg.target_group_arns
+  value       = aws_instance.api_example.public_ip
 }
 
-output "asg_launch_configuration" {
+output "api_example_ami" {
   description = "Config of the Auto Scaling Group"
-  value       = aws_autoscaling_group.web_asg.launch_configuration
+  value       = aws_instance.api_example.ami
 }
 
-output "asg_desired_capacity" {
-  description = "Desired capacity of the Auto Scaling Group"
-  value       = aws_autoscaling_group.web_asg.desired_capacity
-}
 
 output "web_nlb_dns_name" {
   description = "DNS name of the Network Load Balancer"
