@@ -71,6 +71,8 @@ variable "security_groups" {
   default = [ "value" ]
 }
 */
+
+
 variable "AWS_ACCESS_KEY_ID" {
   description = "The aws_access_key"
   type        = string

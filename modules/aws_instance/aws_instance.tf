@@ -47,10 +47,12 @@ resource "aws_security_group" "example_sg" {
   }
 
 resource "aws_instance" "api_example" {
-  ami      = "ami-0840becec4971bb87" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
+  ami      = "ami-0fc5d935ebf8bc3bc" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
   security_groups = [aws_security_group.web_sg.id]
+  availability_zone  = "us-east-1a"
+  metadata_options { http_endpoint = "enabled" }
   # subnet_id = aws_subnet.example_subnet_1.id
   # key_name      = "your-key-name"        # Replace with your key name
   
@@ -67,6 +69,7 @@ resource "aws_instance" "api_example" {
   }
 
   */
+
   user_data = <<-EOF
               #!/bin/bash
               # User data script for installing a FastAPI web API on Amazon Linux 2
@@ -127,7 +130,7 @@ resource "aws_instance" "api_example" {
     command = "ansible-playbook -u root -i ${aws_launch_configuration.web_lc.ip_address} 
                 --private_key './path2key/key' 
                 -e pub-key=${var.ssh_key} 
-                ansible-configuration.yaml"
+                ../ansible/api_example.yaml"
               
   }
   */
