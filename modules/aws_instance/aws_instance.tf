@@ -50,7 +50,7 @@ resource "aws_instance" "api_example" {
   ami      = "ami-0fc5d935ebf8bc3bc" # CHANGE-ME ami-06a869d0fb5f8ad84 Specify your desired AMI
   instance_type = "t2.micro"             # Choose an appropriate instance type
   associate_public_ip_address = true
-  security_groups = [aws_security_group.web_sg.id]
+  # security_groups = [aws_security_group.web_sg.id]
   availability_zone  = "us-east-1a"
   # subnet_id = aws_subnet.example_subnet_1.id
   # key_name      = "your-key-name"        # Replace with your key name
