@@ -12,7 +12,7 @@ data "aws_vpc" "default" {
 
 resource "aws_subnet" "example_subnet_1" {
   vpc_id = data.aws_vpc.default.id
-  cidr_block = "172.31.24.0/20" # from the aws dash
+  cidr_block = "172.31.16.0/20" # from the aws dash
   availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
