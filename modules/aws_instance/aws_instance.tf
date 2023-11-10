@@ -9,7 +9,13 @@ data "aws_vpc" "default" {
 }
 
 /*
-resource "aws_subnet" "example_subnet_1" {
+data "aws_subnet" "subnet_1" {
+  vpc_id = data.aws_vpc.default.id
+  cidr_block = "172.31.64.0/20"
+}
+
+
+data "aws_subnet" "example_subnet_1" {
   vpc_id = data.aws_vpc.default.id
   cidr_block = "172.31.16.0/20" # from the aws dash
   availability_zone = "us-east-1b"
