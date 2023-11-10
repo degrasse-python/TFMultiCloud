@@ -8,11 +8,7 @@ data "aws_vpc" "default" {
   default = true
 }
 
-// Pull Rquest 1 - delete this block
-# Define a VPC and subnets
-resource "aws_vpc" "example_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
+
 
 resource "aws_subnet" "example_subnet_1" {
   vpc_id = data.aws_vpc.default.id
@@ -158,7 +154,7 @@ resource "aws_db_instance" "example" {
   instance_class       = "db.t2.micro"
   username             = "admin"
   password             = "password"
-  parameter_group_name = "default.postgres12"
+  parameter_group_name = "default.postgres15"
   skip_final_snapshot  = true
   vpc_security_group_ids = [aws_security_group.db_sg.id]
 
@@ -190,7 +186,7 @@ resource "aws_lb" "web_nlb" {
   load_balancer_type = "network"
 
   subnet_mapping {
-    subnet_id     = data.aws_vpc.default.id # Replace with your subnet IDs
+    subnet_id     = aws_subnet.example_subnet_1.id # Replace with your subnet IDs
   }
 
   enable_deletion_protection = false  # Modify as needed
