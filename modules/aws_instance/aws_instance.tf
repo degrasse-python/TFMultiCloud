@@ -154,7 +154,7 @@ resource "aws_security_group" "db_sg" {
 resource "aws_db_instance" "example" {
   allocated_storage    = 20
   engine               = "postgres"
-  engine_version       = "15.3-R2"
+  engine_version       = "15.3"
   instance_class       = "db.t2.micro"
   username             = "admin"
   password             = "password"
