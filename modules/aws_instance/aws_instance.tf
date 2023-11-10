@@ -8,11 +8,13 @@ data "aws_vpc" "default" {
   default = true
 }
 
+// Pull Rquest 1 - delete this block
 # Define a VPC and subnets
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
+// Pull Rquest 1 - change vpc_id to data.aws_vpc.default.id
 resource "aws_subnet" "example_subnet_1" {
   vpc_id                  = aws_vpc.example_vpc.id
   cidr_block              = "10.0.1.0/24"
@@ -21,7 +23,7 @@ resource "aws_subnet" "example_subnet_1" {
 }
 
 resource "aws_subnet" "example_subnet_2" {
-  vpc_id                  = aws_vpc.example_vpc.id
+  vpc_id                  = data.aws_vpc.default.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
@@ -31,10 +33,6 @@ resource "aws_subnet" "example_subnet_2" {
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = aws_vpc.example_vpc.id
 }
-
-/*
-
-PULL REQUEST 1
 
 # Define a security group for your instances
 resource "aws_security_group" "ec2_sg" {
@@ -50,6 +48,7 @@ resource "aws_security_group" "ec2_sg" {
    }
 }
 
+/*
 resource "aws_key_pair" "example_key_pair" {
   key_name   = "example-key-pair"
   public_key = var.EC2_KEY_PAIR_PUBLIC_KEY
@@ -150,7 +149,7 @@ resource "aws_instance" "api_example" {
 
 resource "aws_security_group" "db_sg" {
   name_prefix = "db_sg"
-  vpc_id      = aws_vpc.example_vpc.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port   = 5432
@@ -199,7 +198,7 @@ resource "aws_lb" "web_nlb" {
   load_balancer_type = "network"
 
   subnet_mapping {
-    subnet_id     = aws_subnet.example_subnet_1.id # Replace with your subnet IDs
+    subnet_id     = data.aws_vpc.default.id # Replace with your subnet IDs
   }
 
   enable_deletion_protection = false  # Modify as needed
