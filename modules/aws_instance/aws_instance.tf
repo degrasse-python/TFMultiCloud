@@ -15,12 +15,13 @@ resource "aws_subnet" "example_subnet_1" {
   availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
-*/
+
 
 # Create an internet gateway
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = data.aws_vpc.default.id
 }
+*/
 
 # Define a security group for your instances
 resource "aws_security_group" "ec2_sg" {
