@@ -16,14 +16,14 @@ resource "aws_vpc" "example_vpc" {
 
 resource "aws_subnet" "example_subnet_1" {
   vpc_id = data.aws_vpc.default.id
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "172.31.24.0/20" # from the aws dash
   availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
 
 # Create an internet gateway
 resource "aws_internet_gateway" "example_igw" {
-  vpc_id = aws_vpc.example_vpc.id
+  vpc_id = data.aws_vpc.default.id
 }
 
 # Define a security group for your instances
@@ -188,6 +188,11 @@ resource "aws_lb" "web_nlb" {
   name               = "web-nlb"
   internal           = false  # Set to "true" if it's an internal NLB
   load_balancer_type = "network"
+
+  subnet_mapping {
+    subnet_id     = data.aws_vpc.default.id # Replace with your subnet IDs
+  }
+
   enable_deletion_protection = false  # Modify as needed
 }
 
