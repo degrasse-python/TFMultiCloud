@@ -8,14 +8,14 @@ data "aws_vpc" "default" {
   default = true
 }
 
-
-
+/*
 resource "aws_subnet" "example_subnet_1" {
   vpc_id = data.aws_vpc.default.id
   cidr_block = "172.31.16.0/20" # from the aws dash
   availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
+*/
 
 # Create an internet gateway
 resource "aws_internet_gateway" "example_igw" {
@@ -147,6 +147,7 @@ resource "aws_security_group" "db_sg" {
   }
 }
 
+/*
 resource "aws_db_instance" "example" {
   allocated_storage    = 20
   engine               = "postgres"
@@ -162,6 +163,7 @@ resource "aws_db_instance" "example" {
     Name = "example"
   }
 }
+*/
 
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
