@@ -189,7 +189,7 @@ resource "aws_lb" "web_nlb" {
   load_balancer_type = "network"
 
   subnet_mapping {
-    subnet_id     = aws_subnet.example_subnet_1.id # Replace with your subnet IDs
+    subnet_id     = "subnet-09fd70ac42e5b56b8" # Replace with your subnet IDs
   }
 
   enable_deletion_protection = false  # Modify as needed
