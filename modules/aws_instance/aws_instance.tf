@@ -14,16 +14,10 @@ resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
-// Pull Rquest 1 - change vpc_id to data.aws_vpc.default.id
 resource "aws_subnet" "example_subnet_1" {
-  vpc_id                  = aws_vpc.example_vpc.id
-  availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
-}
-
-resource "aws_subnet" "example_subnet_2" {
-  vpc_id                  = data.aws_vpc.default.id
-  availability_zone       = "us-east-1b"
+  vpc_id = data.aws_vpc.default.id
+  cidr_block = "10.0.0.0/16"
+  availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
 
@@ -194,11 +188,6 @@ resource "aws_lb" "web_nlb" {
   name               = "web-nlb"
   internal           = false  # Set to "true" if it's an internal NLB
   load_balancer_type = "network"
-
-  subnet_mapping {
-    subnet_id     = data.aws_vpc.default.id # Replace with your subnet IDs
-  }
-
   enable_deletion_protection = false  # Modify as needed
 }
 
