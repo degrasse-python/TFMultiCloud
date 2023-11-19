@@ -3,6 +3,12 @@ output "api_example_user_data" {
   value       = aws_instance.api_example.user_data
 }
 
+output "aws_instance_arn" {
+  description = "Name of the Auto Scaling Group"
+  value       = aws_instance.api_example.arn
+  
+}
+
 output "api_example_ip" {
   description = "Target Group ARNs of the Auto Scaling Group"
   value       = aws_instance.api_example.public_ip
